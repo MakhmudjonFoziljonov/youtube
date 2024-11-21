@@ -4,7 +4,7 @@ import com.youtube.dto.TagDTO;
 import com.youtube.service.TagService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +15,6 @@ import java.util.List;
 public class TagController {
 
     private final TagService tagService;
-
-
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }
@@ -26,12 +24,12 @@ public class TagController {
     }
 
     @PutMapping("/update/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateTag(@PathVariable Integer id, @RequestBody TagDTO tagDTO) {
           tagService.update(id, tagDTO);
     }
     @DeleteMapping("{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteTag(@PathVariable Integer id) {
        tagService.delete(id);
     }
