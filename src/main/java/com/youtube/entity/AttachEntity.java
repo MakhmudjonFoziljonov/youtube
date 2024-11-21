@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -16,7 +17,7 @@ public class AttachEntity {
     @Id
     private String id;
 
-    @Column(nullable = false)
+    @Column(name = "origin_name", nullable = false)
     private String originName;
 
     @Column(nullable = false)
@@ -28,7 +29,9 @@ public class AttachEntity {
     @Column(nullable = false)
     private String path;
 
-    private Double duration;
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate = LocalDateTime.now();
+
+    @Column(name = "visible", nullable = false)
+    private Boolean visible = true;
 }
