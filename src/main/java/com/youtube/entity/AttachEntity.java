@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Entity
@@ -29,9 +28,12 @@ public class AttachEntity {
     @Column(nullable = false)
     private String path;
 
-    @Column(name = "created_date")
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
 
     @Column(name = "visible", nullable = false)
     private Boolean visible = true;
+
+    @Column(nullable = false)
+    private Double duration;
 }
