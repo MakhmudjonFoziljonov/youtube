@@ -70,5 +70,21 @@ public class ProfileService {
             throw new UsernameNotFoundException(resourceBundleService.getMessage("phone.or.password.wrong", lang));
         }
         throw new UsernameNotFoundException(resourceBundleService.getMessage("phone.or.password.wrong", lang));
+
+
+    }
+
+    public boolean changePassword(String oldPassword, String newPassword, String confirmPassword) {
+        if (!newPassword.equals(confirmPassword)) {
+            return false;
+        }
+        Optional<ProfileEntity> profile=profileRepository.findByPassword(oldPassword);
+        if (profile == null) {
+            return false;
+        }
+        ProfileEntity profile1=new ProfileEntity();
+        profile1.setPassword(newPassword);
+        profileRepository.save(profile1);
+        return true;
     }
 }
