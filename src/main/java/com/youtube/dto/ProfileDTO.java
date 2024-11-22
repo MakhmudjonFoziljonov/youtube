@@ -10,7 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProfileDTO {
+public class
+ProfileDTO {
     private String id;
     private String name;
     private String surname;
