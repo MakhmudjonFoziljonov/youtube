@@ -88,7 +88,7 @@ public class ProfileService {
         return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
     }
 
-    public String updateMainPhoto(Integer userId, MultipartFile photo)
+    public String updateMainPhoto(String userId, MultipartFile photo)
             throws IOException, ChangeSetPersister.NotFoundException {
         ProfileEntity user = profileRepository.findById(userId)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
@@ -109,7 +109,7 @@ public class ProfileService {
         }
         return " ";
     }
-    public ResponseEntity<ProfileDTO> getProfileDetail(Integer userId) {
+    public ResponseEntity<ProfileDTO> getProfileDetail(String userId) {
         Optional<ProfileEntity> optional = profileRepository.findById(userId);
 
         if (optional.isPresent()) {

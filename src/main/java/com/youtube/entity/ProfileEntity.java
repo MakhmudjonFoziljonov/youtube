@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "profile_entity")
 public class ProfileEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue
+    private String id;
     @Column(name = "name")
     private String name;
     @Column(name = "surname")

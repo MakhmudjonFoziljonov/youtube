@@ -1,8 +1,7 @@
 package com.youtube.controller;
 
 import com.youtube.dto.*;
-import com.youtube.entity.ProfileEntity;
-import com.youtube.enums.AppLang;
+
 import com.youtube.service.ProfileService;
 import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
@@ -42,7 +41,7 @@ public class ProfileController {
 
     @PutMapping("/update-photo")
     public ResponseEntity<String> updateMainPhoto(
-            @RequestHeader("userId") Integer userId,
+            @RequestHeader("userId") String userId,
             @RequestParam("photo") MultipartFile photo) {
 
         try {
@@ -57,7 +56,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDTO> getProfile(@PathVariable Integer id) {
+    public ResponseEntity<ProfileDTO> getProfile(@PathVariable String id) {
         ProfileDTO profile = profileService.getProfileDetail(id).getBody();
 
         if (profile != null) {

@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class
 ProfileDTO {
-    private Integer id;
+    private String id;
     private String name;
     private String surname;
     private String email;
