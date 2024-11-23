@@ -1,24 +1,17 @@
 package com.youtube.service;
 
-import com.youtube.config.AppConfig;
-import com.youtube.config.CustomUserDetails;
+
 import com.youtube.dto.*;
 import com.youtube.entity.ProfileEntity;
-import com.youtube.enums.AppLang;
 import com.youtube.enums.ProfileStatus;
 import com.youtube.exp.AppBadRequestException;
 import com.youtube.repository.ProfileRepository;
-import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,6 +68,28 @@ public class ProfileService {
 
         return dto;
     }
+    public String updateMainPhoto(String  userId, MultipartFile photo)
+
+        throws IOException, ChangeSetPersister.NotFoundException {
+    ProfileEntity user = profileRepository.findById(userId)
+            .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+    if (user.getPhoto() != null) {
+        File oldPhoto = new File(photo + user.getPhoto());
+        if (oldPhoto.exists()) {
+            oldPhoto.delete();
+        }
+        String newPhotoName = UUID.randomUUID().toString() + "_" + photo.getOriginalFilename();
+        File newPhotoFile = new File(photo + newPhotoName);
+        photo.transferTo(newPhotoFile);
+
+        user.setPhoto(newPhotoName);
+        profileRepository.save(user);
+
+        return "Profile photo updated successfully.";
+    }
+    return " ";
+}
 
     public boolean updateDetail(@Valid UpdateProfileDetailDTO requestDTO, String username) {
         ProfileEntity profile = getByUsername(username);
@@ -88,28 +103,7 @@ public class ProfileService {
         return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
     }
 
-    public String updateMainPhoto(String  userId, MultipartFile photo)
 
-            throws IOException, ChangeSetPersister.NotFoundException {
-        ProfileEntity user = profileRepository.findById(userId)
-                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-
-        if (user.getPhoto() != null) {
-            File oldPhoto = new File(photo + user.getPhoto());
-            if (oldPhoto.exists()) {
-                oldPhoto.delete();
-            }
-            String newPhotoName = UUID.randomUUID().toString() + "_" + photo.getOriginalFilename();
-            File newPhotoFile = new File(photo + newPhotoName);
-            photo.transferTo(newPhotoFile);
-
-            user.setPhoto(newPhotoName);
-            profileRepository.save(user);
-
-            return "Profile photo updated successfully.";
-        }
-        return " ";
-    }
     public ResponseEntity<ProfileDTO> getProfileDetail(String userId) {
         Optional<ProfileEntity> optional = profileRepository.findById(userId);
 
@@ -161,23 +155,7 @@ public class ProfileService {
             return true;
         }
 
-        throw new UsernameNotFoundException(resourceBundleService.getMessage("phone.or.password.wrong", lang));
-
-
-    }
-
-    public boolean changePassword(String oldPassword, String newPassword, String confirmPassword) {
-        if (!newPassword.equals(confirmPassword)) {
-            return false;
-        }
-        Optional<ProfileEntity> profile=profileRepository.findByPassword(oldPassword);
-        if (profile == null) {
-            return false;
-        }
-        ProfileEntity profile1=new ProfileEntity();
-        profile1.setPassword(newPassword);
-        profileRepository.save(profile1);
-        return true;
+        return false;
     }
 
 
