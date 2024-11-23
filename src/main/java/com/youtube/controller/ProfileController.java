@@ -1,8 +1,7 @@
 package com.youtube.controller;
 
 import com.youtube.dto.*;
-import com.youtube.entity.ProfileEntity;
-import com.youtube.enums.AppLang;
+
 import com.youtube.service.ProfileService;
 import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;

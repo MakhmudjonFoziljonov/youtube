@@ -88,7 +88,11 @@ public class ProfileService {
         return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
     }
 
+<<<<<<< HEAD
     public String updateMainPhoto(String  userId, MultipartFile photo)
+=======
+    public String updateMainPhoto(String userId, MultipartFile photo)
+>>>>>>> Channel
             throws IOException, ChangeSetPersister.NotFoundException {
         ProfileEntity user = profileRepository.findById(userId)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
