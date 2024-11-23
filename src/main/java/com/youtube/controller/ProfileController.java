@@ -42,7 +42,7 @@ public class ProfileController {
 
     @PutMapping("/update-photo")
     public ResponseEntity<String> updateMainPhoto(
-            @RequestHeader("userId") Integer userId,
+            @RequestHeader("userId") String userId,
             @RequestParam("photo") MultipartFile photo) {
 
         try {
@@ -57,7 +57,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDTO> getProfile(@PathVariable Integer id) {
+    public ResponseEntity<ProfileDTO> getProfile(@PathVariable String id) {
         ProfileDTO profile = profileService.getProfileDetail(id).getBody();
 
         if (profile != null) {

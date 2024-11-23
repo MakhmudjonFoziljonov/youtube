@@ -88,7 +88,7 @@ public class ProfileService {
         return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
     }
 
-    public String updateMainPhoto(Integer userId, MultipartFile photo)
+    public String updateMainPhoto(String  userId, MultipartFile photo)
             throws IOException, ChangeSetPersister.NotFoundException {
         ProfileEntity user = profileRepository.findById(userId)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
@@ -109,7 +109,7 @@ public class ProfileService {
         }
         return " ";
     }
-    public ResponseEntity<ProfileDTO> getProfileDetail(Integer userId) {
+    public ResponseEntity<ProfileDTO> getProfileDetail(String userId) {
         Optional<ProfileEntity> optional = profileRepository.findById(userId);
 
         if (optional.isPresent()) {
@@ -139,6 +139,28 @@ public class ProfileService {
             return null;
         }
         return photoBaseUrl + photoName;
+    }
+    public boolean changePassword(String id,String oldPassword, String currentPassword, String confirmNewPassword) {
+        Optional<ProfileEntity> optionalProfile = profileRepository.findById(id);
+        if (optionalProfile.isPresent()) {
+            ProfileEntity profile = optionalProfile.get();
+
+            if (!bCryptPasswordEncoder.matches(oldPassword, profile.getPassword())) {
+                return false;
+            }
+
+            if (!currentPassword.equals(confirmNewPassword)) {
+                return false;
+            }
+
+            String encodedPassword = bCryptPasswordEncoder.encode(currentPassword);
+            profile.setPassword(encodedPassword);
+
+            profileRepository.save(profile);
+            return true;
+        }
+
+        return false;
     }
 
 
