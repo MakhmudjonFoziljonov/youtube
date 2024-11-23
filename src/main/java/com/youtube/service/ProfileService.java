@@ -1,24 +1,15 @@
 package com.youtube.service;
-
-import com.youtube.config.AppConfig;
-import com.youtube.config.CustomUserDetails;
 import com.youtube.dto.*;
 import com.youtube.entity.ProfileEntity;
-import com.youtube.enums.AppLang;
 import com.youtube.enums.ProfileStatus;
 import com.youtube.exp.AppBadRequestException;
 import com.youtube.repository.ProfileRepository;
-import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
