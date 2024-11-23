@@ -1,6 +1,6 @@
 package com.youtube.controller;
 
-import com.youtube.dto.AuthRequestDTO;
+import com.youtube.dto.auth.AuthRequestDTO;
 import com.youtube.dto.AuthResponseDTO;
 import com.youtube.dto.ChangePasswordDTO;
 import com.youtube.dto.ProfileDTO;

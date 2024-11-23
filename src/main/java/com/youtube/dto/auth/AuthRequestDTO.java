@@ -1,4 +1,4 @@
-package com.youtube.dto;
+package com.youtube.dto.auth;
 
 import lombok.Getter;
 import lombok.Setter;

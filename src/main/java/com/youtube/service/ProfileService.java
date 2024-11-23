@@ -1,8 +1,7 @@
 package com.youtube.service;
 
-import com.youtube.config.AppConfig;
 import com.youtube.config.CustomUserDetails;
-import com.youtube.dto.AuthRequestDTO;
+import com.youtube.dto.auth.AuthRequestDTO;
 import com.youtube.dto.AuthResponseDTO;
 import com.youtube.dto.ProfileDTO;
 import com.youtube.entity.ProfileEntity;
