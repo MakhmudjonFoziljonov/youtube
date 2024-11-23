@@ -11,6 +11,7 @@ import com.youtube.repository.ProfileRepository;
 import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,9 +19,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProfileService {
@@ -29,10 +34,8 @@ public class ProfileService {
     private ProfileRepository profileRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private ResourceBundleService resourceBundleService;
+
+
 
     public ProfileDTO createProfile(ProfileCreationDTO request) {
         Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleTrue(request.getEmail());
@@ -79,5 +82,27 @@ public class ProfileService {
     }
     public ProfileEntity getByUsername(String username) {
         return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
+    }
+
+    public String updateMainPhoto(Integer userId, MultipartFile photo)
+            throws IOException, ChangeSetPersister.NotFoundException {
+        ProfileEntity user = profileRepository.findById(userId)
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+        if (user.getPhotoId() != null) {
+            File oldPhoto = new File(photo + user.getPhotoId());
+            if (oldPhoto.exists()) {
+                oldPhoto.delete();
+            }
+            String newPhotoName = UUID.randomUUID().toString() + "_" + photo.getOriginalFilename();
+            File newPhotoFile = new File(photo + newPhotoName);
+            photo.transferTo(newPhotoFile);
+
+            user.setPhotoId(newPhotoName);
+            profileRepository.save(user);
+
+            return "Profile photo updated successfully.";
+        }
+        return " ";
     }
 }

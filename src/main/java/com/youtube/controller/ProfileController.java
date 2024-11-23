@@ -6,8 +6,13 @@ import com.youtube.service.ProfileService;
 import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/profile")
@@ -34,4 +39,19 @@ public class ProfileController {
         return ResponseEntity.ok().body(profileService.updateDetail(requestDTO, dto.getUsername()));
     }
 
+    @PutMapping("/update-photo")
+    public ResponseEntity<String> updateMainPhoto(
+            @RequestHeader("userId") Integer userId,
+            @RequestParam("photo") MultipartFile photo) {
+
+        try {
+            String message = profileService.updateMainPhoto(userId, photo);
+            return ResponseEntity.ok(message);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload photo.");
+        } catch (ChangeSetPersister.NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
