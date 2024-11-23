@@ -27,9 +27,11 @@ public class ChannelEntity {
 
     @Enumerated(EnumType.STRING)
     private ChannelStatus status;
+
     @Column(name = "profile_id")
     private String profile_id;
 
+    private boolean visible;
 
 
 }

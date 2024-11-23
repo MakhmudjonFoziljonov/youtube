@@ -1,9 +1,12 @@
 package com.youtube.controller;
 
+import com.youtube.dto.ChangeChannelStatusDTO;
 import com.youtube.dto.ChannelDTO;
 import com.youtube.dto.ChannelPhotoDTO;
 import com.youtube.entity.ChannelEntity;
 import com.youtube.service.ChannelService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +24,7 @@ public class ChannelController {
     }
 
     @PostMapping("/channel/create")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> create(@RequestBody ChannelDTO channelDTO) {
         if (channelDTO.getName() == null || channelDTO.getName().isEmpty() ||
                 channelDTO.getDescription() == null || channelDTO.getDescription().isEmpty()) {
@@ -51,6 +55,7 @@ public class ChannelController {
     }
 
     @PutMapping("/id/photo")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<String> updatePhoto(@PathVariable String channelId,
                                               @RequestBody ChannelPhotoDTO channelPhotoDTO,
                                               @RequestHeader("X-User-Id") String profileId,
@@ -81,6 +86,33 @@ public class ChannelController {
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/page")
+    @PreAuthorize("hasRole('Admin')")
+
+    public ResponseEntity<Page<ChannelEntity>> getChannels(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String sortDirection) {
+
+        Page<ChannelEntity> channels = channelService.getChannels(page, size,  sortDirection);
+        return ResponseEntity.ok(channels);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<ChannelEntity> getChannel(@PathVariable String id) {
+
+    return channelService.getById(id);
+    }
+
+    @PutMapping("/channel-status")
+    public ResponseEntity<String> changeChannelStatus(
+            @RequestHeader("userId") Long userId,
+            @RequestHeader("role") String role,
+            @RequestBody ChangeChannelStatusDTO dto){
+        String message = channelService.changeChannelStatus(userId, role, dto);
+        return ResponseEntity.ok(message);
     }
 }
 
