@@ -2,13 +2,14 @@ package com.youtube.service;
 
 import com.youtube.config.AppConfig;
 import com.youtube.config.CustomUserDetails;
-import com.youtube.dto.AuthRequestDTO;
-import com.youtube.dto.AuthResponseDTO;
-import com.youtube.dto.ProfileDTO;
+import com.youtube.dto.*;
 import com.youtube.entity.ProfileEntity;
 import com.youtube.enums.AppLang;
+import com.youtube.enums.ProfileStatus;
+import com.youtube.exp.AppBadRequestException;
 import com.youtube.repository.ProfileRepository;
 import com.youtube.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -32,43 +34,50 @@ public class ProfileService {
     @Autowired
     private ResourceBundleService resourceBundleService;
 
-    public ProfileDTO registration(ProfileDTO dto) {
-        Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleTrue(dto.getEmail());
+    public ProfileDTO createProfile(ProfileCreationDTO request) {
+        Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleTrue(request.getEmail());
         if (optional.isPresent()) {
-            return null;
+            throw new AppBadRequestException("Email already in use");
         }
-
         ProfileEntity entity = new ProfileEntity();
-        entity.setName(dto.getName());
-        entity.setSurname(dto.getSurname());
-        entity.setEmail(dto.getEmail());
-        entity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-        entity.setRole(dto.getRole());
-
+        entity.setName(request.getName());
+        entity.setSurname(request.getSurname());
+        entity.setEmail(request.getEmail());
+        entity.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+        entity.setRole(request.getRole());
+        entity.setStatus(ProfileStatus.ACTIVE);
+        entity.setVisible(Boolean.TRUE);
+        entity.setCreatedDate(LocalDateTime.now());
         profileRepository.save(entity);
 
-        dto.setId(String.valueOf(entity.getId()));
-        return dto;
+
+        return mapToDTO(entity);
     }
 
 
-    public AuthResponseDTO authorization(AuthRequestDTO auth, AppLang lang) throws UsernameNotFoundException {
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(auth.getEmail(), auth.getPassword()));
+    public ProfileDTO mapToDTO(ProfileEntity entity) {
+        ProfileDTO dto = new ProfileDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setSurname(entity.getSurname());
+        dto.setEmail(entity.getEmail());
+        dto.setPassword(entity.getPassword());
+        dto.setStatus(entity.getStatus());
+        dto.setRole(entity.getRole());
+        dto.setCreatedDate(entity.getCreatedDate());
 
-            if (authentication.isAuthenticated()) {
-                CustomUserDetails profile = (CustomUserDetails) authentication.getPrincipal();
-                AuthResponseDTO response = new AuthResponseDTO();
-                response.setName(profile.getName());
-                response.setSurname(profile.getSurname());
-                response.setEmail(profile.getEmail());
-                response.setRole(profile.getRole());
-                response.setJwtToken(JwtUtil.encode(profile.getEmail(), profile.getRole().name()));
-                return response;
-            }
-        } catch (BadCredentialsException e) {
-            throw new UsernameNotFoundException(resourceBundleService.getMessage("phone.or.password.wrong", lang));
-        }
-        throw new UsernameNotFoundException(resourceBundleService.getMessage("phone.or.password.wrong", lang));
+        return dto;
+    }
+
+    public boolean updateDetail(@Valid UpdateProfileDetailDTO requestDTO, String username) {
+        ProfileEntity profile = getByUsername(username);
+        profile.setName(requestDTO.getName());
+        profile.setSurname(requestDTO.getSurname());
+        profileRepository.save(profile);
+
+        return true;
+    }
+    public ProfileEntity getByUsername(String username) {
+        return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
     }
 }

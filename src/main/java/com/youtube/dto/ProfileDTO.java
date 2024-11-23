@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class
 ProfileDTO {
-    private String id;
+    private Integer id;
     private String name;
     private String surname;
     private String email;
@@ -22,7 +22,6 @@ ProfileDTO {
     private String photoId;
     private LocalDateTime createdDate;
     private String jwtToken;
-//    private AttachDTO photo;
 
     private List<String> imageIds;
 }

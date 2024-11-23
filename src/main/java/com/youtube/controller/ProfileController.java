@@ -1,10 +1,10 @@
 package com.youtube.controller;
 
-import com.youtube.dto.AuthRequestDTO;
-import com.youtube.dto.AuthResponseDTO;
-import com.youtube.dto.ProfileDTO;
+import com.youtube.dto.*;
 import com.youtube.enums.AppLang;
 import com.youtube.service.ProfileService;
+import com.youtube.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +15,23 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @PostMapping("/registration")
-    public ResponseEntity<ProfileDTO> create(@RequestBody ProfileDTO dto) {
-        ProfileDTO result = profileService.registration(dto);
-        return ResponseEntity.ok(result);
+    @PostMapping("")
+    public ResponseEntity<ProfileDTO> addProfile(@RequestBody @Valid ProfileCreationDTO requestDTO) {
+        return ResponseEntity.status(201).body(profileService.createProfile(requestDTO));
     }
 
-    @PostMapping("/authorization")
-    public ResponseEntity<AuthResponseDTO> authorization(@RequestBody AuthRequestDTO dto,
-                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLang lang) {
-        AuthResponseDTO result = profileService.authorization(dto, lang);
-        return ResponseEntity.ok(result);
+
+
+    @PutMapping("/change/password")
+    public void changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+
     }
+
+    @PutMapping("/detail")
+    public ResponseEntity<Boolean> updateDetail(@RequestBody @Valid UpdateProfileDetailDTO requestDTO,
+                                                @RequestHeader("Authorization") String token) {
+        JwtDTO dto = JwtUtil.decode(token.substring(7));
+        return ResponseEntity.ok().body(profileService.updateDetail(requestDTO, dto.getUsername()));
+    }
+
 }
