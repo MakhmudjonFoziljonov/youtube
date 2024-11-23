@@ -1,6 +1,7 @@
 package com.youtube.controller;
 
 import com.youtube.dto.*;
+import com.youtube.entity.ProfileEntity;
 import com.youtube.enums.AppLang;
 import com.youtube.service.ProfileService;
 import com.youtube.util.JwtUtil;
@@ -54,4 +55,16 @@ public class ProfileController {
         }
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfileDTO> getProfile(@PathVariable Integer id) {
+        ProfileDTO profile = profileService.getProfileDetail(id).getBody();
+
+        if (profile != null) {
+            return ResponseEntity.ok(profile);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 }

@@ -12,6 +12,8 @@ import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +36,8 @@ public class ProfileService {
     private ProfileRepository profileRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final String photoBaseUrl = "http://localhost:8080/uploads/profile_photos/";
+
 
 
 
@@ -89,8 +93,8 @@ public class ProfileService {
         ProfileEntity user = profileRepository.findById(userId)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
-        if (user.getPhotoId() != null) {
-            File oldPhoto = new File(photo + user.getPhotoId());
+        if (user.getPhoto() != null) {
+            File oldPhoto = new File(photo + user.getPhoto());
             if (oldPhoto.exists()) {
                 oldPhoto.delete();
             }
@@ -98,11 +102,44 @@ public class ProfileService {
             File newPhotoFile = new File(photo + newPhotoName);
             photo.transferTo(newPhotoFile);
 
-            user.setPhotoId(newPhotoName);
+            user.setPhoto(newPhotoName);
             profileRepository.save(user);
 
             return "Profile photo updated successfully.";
         }
         return " ";
     }
+    public ResponseEntity<ProfileDTO> getProfileDetail(Integer userId) {
+        Optional<ProfileEntity> optional = profileRepository.findById(userId);
+
+        if (optional.isPresent()) {
+            ProfileEntity profileEntity = optional.get();
+            ProfileDTO profileDTO = new ProfileDTO();
+            profileDTO.setId(profileEntity.getId());
+            profileDTO.setName(profileEntity.getName());
+            profileDTO.setSurname(profileEntity.getSurname());
+            profileDTO.setEmail(profileEntity.getEmail());
+            profileDTO.setPassword(profileEntity.getPassword());
+            profileDTO.setStatus(profileEntity.getStatus());
+            profileDTO.setRole(profileEntity.getRole());
+            profileDTO.setCreatedDate(profileEntity.getCreatedDate());
+
+            String photoUrl = generatePhotoUrl(profileEntity.getPhoto());
+            profileDTO.setPhotoId(photoUrl);
+
+            return ResponseEntity.ok(profileDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
+    public String generatePhotoUrl(String photoName) {
+        if (photoName == null || photoName.isEmpty()) {
+            return null;
+        }
+        return photoBaseUrl + photoName;
+    }
+
+
 }
