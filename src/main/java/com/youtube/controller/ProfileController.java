@@ -1,6 +1,5 @@
 package com.youtube.controller;
 
-<<<<<<< HEAD
 import com.youtube.dto.*;
 
 import com.youtube.service.ProfileService;
@@ -8,16 +7,10 @@ import com.youtube.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
-=======
-import com.youtube.dto.AuthRequestDTO;
-import com.youtube.dto.AuthResponseDTO;
+
 import com.youtube.dto.ChangePasswordDTO;
 import com.youtube.dto.ProfileDTO;
-import com.youtube.enums.AppLang;
-import com.youtube.service.ProfileService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> 36714f071d57753ea412a35006b60f1ccca2e0df
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,13 +29,6 @@ public class ProfileController {
         return ResponseEntity.status(201).body(profileService.createProfile(requestDTO));
     }
 
-
-
-    @PutMapping("/change/password")
-    public void changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-
-    }
-
     @PutMapping("/detail")
     public ResponseEntity<Boolean> updateDetail(@RequestBody @Valid UpdateProfileDetailDTO requestDTO,
                                                 @RequestHeader("Authorization") String token) {
@@ -50,7 +36,6 @@ public class ProfileController {
         return ResponseEntity.ok().body(profileService.updateDetail(requestDTO, dto.getUsername()));
     }
 
-<<<<<<< HEAD
     @PutMapping("/update-photo")
     public ResponseEntity<String> updateMainPhoto(
             @RequestHeader("userId") String userId,
@@ -78,15 +63,23 @@ public class ProfileController {
         }
     }
 
-=======
-    @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
-        boolean isChanged = profileService.changePassword(changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword(), changePasswordDTO.getConfirmPassword());
+
+    @PostMapping("/change-password/{id}")
+    public ResponseEntity<String> changePassword(
+            @PathVariable("id") String id,
+            @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
+        boolean isChanged = profileService.changePassword(
+                id,
+                changePasswordDTO.getCurrentPassword(),
+                changePasswordDTO.getNewPassword(),
+                changePasswordDTO.getConfirmNewPassword()
+        );
+
         if (isChanged) {
             return ResponseEntity.ok("Password successfully updated");
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password change failed");
         }
     }
->>>>>>> 36714f071d57753ea412a35006b60f1ccca2e0df
 }
+
