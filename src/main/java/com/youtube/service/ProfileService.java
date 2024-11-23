@@ -88,11 +88,8 @@ public class ProfileService {
         return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadRequestException("User not found"));
     }
 
-<<<<<<< HEAD
     public String updateMainPhoto(String  userId, MultipartFile photo)
-=======
-    public String updateMainPhoto(String userId, MultipartFile photo)
->>>>>>> Channel
+
             throws IOException, ChangeSetPersister.NotFoundException {
         ProfileEntity user = profileRepository.findById(userId)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
@@ -163,10 +160,7 @@ public class ProfileService {
             profileRepository.save(profile);
             return true;
         }
-<<<<<<< HEAD
 
-        return false;
-=======
         throw new UsernameNotFoundException(resourceBundleService.getMessage("phone.or.password.wrong", lang));
 
 
@@ -184,7 +178,6 @@ public class ProfileService {
         profile1.setPassword(newPassword);
         profileRepository.save(profile1);
         return true;
->>>>>>> 36714f071d57753ea412a35006b60f1ccca2e0df
     }
 
 
