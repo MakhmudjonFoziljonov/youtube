@@ -6,6 +6,7 @@ import com.youtube.dto.ChannelPhotoDTO;
 import com.youtube.entity.ChannelEntity;
 import com.youtube.service.ChannelService;
 import jakarta.validation.Valid;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -110,7 +111,7 @@ public class ChannelController {
     public ResponseEntity<String> changeChannelStatus(
             @RequestHeader("userId") Long userId,
             @RequestHeader("role") String role,
-            @RequestBody ChangeChannelStatusDTO dto){
+            @RequestBody ChangeChannelStatusDTO dto) throws ChangeSetPersister.NotFoundException {
         String message = channelService.changeChannelStatus(userId, role, dto);
         return ResponseEntity.ok(message);
     }
