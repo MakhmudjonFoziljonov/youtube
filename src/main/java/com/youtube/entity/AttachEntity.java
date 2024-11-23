@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table
+@Table(name = "attach")
 public class AttachEntity {
     @Id
     private String id;
