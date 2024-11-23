@@ -63,11 +63,11 @@ public class ProfileController {
         }
     }
 
+
     @PostMapping("/change-password/{id}")
     public ResponseEntity<String> changePassword(
             @PathVariable("id") String id,
             @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
-
         boolean isChanged = profileService.changePassword(
                 id,
                 changePasswordDTO.getCurrentPassword(),

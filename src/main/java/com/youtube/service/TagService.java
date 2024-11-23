@@ -5,6 +5,7 @@ import com.youtube.entity.TagEntity;
 import com.youtube.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ public class TagService {
     public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
-
     public void create(TagDTO tagDTO) {
         if (tagDTO.getName() == null || tagDTO.getName().isEmpty()) {
             throw new IllegalArgumentException("Tag name cannot be null or empty");
@@ -38,18 +38,18 @@ public class TagService {
     }
 
     public void delete(Integer id) {
-        Optional<TagEntity> entity = tagRepository.findById(id);
-        if (entity.isPresent()) {
+        Optional<TagEntity> entity=tagRepository.findById(id);
+        if(entity.isPresent()) {
             tagRepository.delete(entity.get());
-        } else {
+        }else {
             throw new EntityNotFoundException("Tag with ID " + id + " not found");
         }
     }
 
-    public List<TagDTO> getAllTags() {
-        List<TagEntity> entityList = (List<TagEntity>) tagRepository.findAll();
+    public  List<TagDTO> getAllTags() {
+        List<TagEntity> entityList= (List<TagEntity>) tagRepository.findAll();
 
-        List<TagDTO> tagDTOList = new ArrayList<>();
+        List<TagDTO> tagDTOList=new ArrayList<>();
 
         for (TagEntity tagEntity : entityList) {
             TagDTO tagDTO = new TagDTO();
@@ -59,7 +59,7 @@ public class TagService {
             tagDTO.setCreatedate(tagEntity.getCreated());
             tagDTOList.add(tagDTO);
         }
-        return tagDTOList;
+        return  tagDTOList;
     }
 
 }

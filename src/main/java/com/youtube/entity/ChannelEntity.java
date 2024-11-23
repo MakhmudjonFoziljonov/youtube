@@ -5,45 +5,33 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Setter
 @Getter
-@Table(name = "channels")
+@Table(name = "channel")
 public class ChannelEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    @GeneratedValue
+    private String id;
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "photo_id")
+    private String photoId;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name= "banner_id")
+    private String bannerID;
 
     @Enumerated(EnumType.STRING)
     private ChannelStatus status;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
     @Column(name = "profile_id")
-    private String profileId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
-    private ProfileEntity profile;
+    private String profile_id;
 
-    @Column(name = "photo_id")
-    private String photoId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_id", insertable = false, updatable = false)
-    private AttachEntity attach;
+    private boolean visible;
 
-    @Column(name = "banner_id")
-    private Integer bannerID;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "banner_id", insertable = false, updatable = false)
-    private BannerEntity banner;
 
 }
