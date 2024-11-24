@@ -7,9 +7,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ChannelResponseDTO {
-
     private Long id;
     private String name;
     private String description;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 }

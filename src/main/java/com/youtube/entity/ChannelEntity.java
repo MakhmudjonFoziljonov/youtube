@@ -25,19 +25,19 @@ public class ChannelEntity {
     private ChannelStatus status;
 
     @Column(name = "profile_id")
-    private String profile_id;
+    private String profileId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profile;
 
     @Column(name = "banner_id")
-    private String bannerId;
+    private Integer bannerId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "banner_id", insertable = false, updatable = false)
     private BannerEntity banner;
 
     @Column(name = "photo_id")
-    private String photo_id;
+    private String photoId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", updatable = false, insertable = false)
     private AttachEntity photo;

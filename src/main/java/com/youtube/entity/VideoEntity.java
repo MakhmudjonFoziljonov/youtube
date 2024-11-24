@@ -50,21 +50,21 @@ public class VideoEntity {
     private Long dislikeCount = 0L;
 
     @Column(name = "category_id", nullable = false)
-    private String categoryId;
+    private Integer categoryId;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",insertable = false, updatable = false)
     private CategoryEntity category;
 
     @Column(name = "channel_id", nullable = false)
     private String channelId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "channel_id")
+    @JoinColumn(name = "channel_id",insertable = false, updatable = false)
     private ChannelEntity channel;
 
     @Column(name = "attach_id")
     private String attachId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "attach_id")
+    @JoinColumn(name = "attach_id", insertable = false, updatable = false)
     private AttachEntity attach;
 
   /*  @Column(name = "preview_attach_id", nullable = false)

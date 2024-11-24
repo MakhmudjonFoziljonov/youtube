@@ -24,30 +24,32 @@ public class ChannelService {
     public ChannelService(ChannelRepository channelRepository) {
         this.channelRepository = channelRepository;
     }
-     public void createChannel(ChannelDTO channelDTO) {
 
-         ChannelEntity channelEntity = new ChannelEntity();
-         channelEntity.setName(channelDTO.getName());
-         channelEntity.setDescription(channelDTO.getDescription());
-         channelEntity.setPhotoId(channelDTO.getPhoto());
-         channelEntity.setBannerID(channelDTO.getBanner());
-         channelEntity.setStatus(ChannelStatus.ACTIVE);
-         channelEntity.setProfile_id(channelDTO.getProfile_id());
-         channelRepository.save(channelEntity);
+    public void createChannel(ChannelDTO channelDTO) {
 
-     }
-     public void updateChannel(ChannelDTO channelDTO) {
+        ChannelEntity channelEntity = new ChannelEntity();
+        channelEntity.setName(channelDTO.getName());
+        channelEntity.setDescription(channelDTO.getDescription());
+        channelEntity.setPhotoId(channelDTO.getPhoto());
+        channelEntity.setBannerId(channelDTO.getBannerId());
+        channelEntity.setStatus(ChannelStatus.ACTIVE);
+        channelEntity.setProfileId(channelDTO.getProfileId());
+        channelRepository.save(channelEntity);
 
-        ChannelEntity channel=new ChannelEntity();
+    }
+
+    public void updateChannel(ChannelDTO channelDTO) {
+
+        ChannelEntity channel = new ChannelEntity();
         channel.setName(channelDTO.getName());
         channel.setDescription(channelDTO.getDescription());
         channel.setPhotoId(channelDTO.getPhoto());
-        channel.setBannerID(channelDTO.getBanner());
+        channel.setBannerId(channelDTO.getBannerId());
         channel.setStatus(ChannelStatus.ACTIVE);
-        channel.setProfile_id(channelDTO.getProfile_id());
+        channel.setProfileId(channelDTO.getProfileId());
         channelRepository.save(channel);
 
-     }
+    }
 
     public Optional<ChannelEntity> updateChannelPhoto(String channelId, ChannelPhotoDTO updateChannelDTO, String profileId, String role) {
         Optional<ChannelEntity> channel = channelRepository.findById(channelId);
@@ -55,12 +57,12 @@ public class ChannelService {
         if (channel == null) {
             throw new IllegalArgumentException("Channel not found");
         }
-        if (!channel.get().getProfile_id().equals(profileId) && !role.equals("OWNER")) {
+        if (!channel.get().getProfileId().equals(profileId) && !role.equals("OWNER")) {
             throw new SecurityException("You are not authorized to update this channel's photo");
         }
         channel.get().setPhotoId(updateChannelDTO.getPhoto());
 
-       return Optional.of(channelRepository.save(channel.get()));
+        return Optional.of(channelRepository.save(channel.get()));
     }
 
     public Optional<ChannelEntity> updateChannelBanner(String channelId, ChannelPhotoDTO updateChannelDTO, String profileId, String role) {
@@ -68,22 +70,23 @@ public class ChannelService {
 
         if (channel == null) {
             throw new IllegalArgumentException("Channel not found");
-        }if (!channel.get().getProfile_id().equals(profileId) && !role.equals("OWNER")) {
+        }
+        if (!channel.get().getProfileId().equals(profileId) && !role.equals("OWNER")) {
             throw new SecurityException("You are not authorized to update this channel's photo");
         }
-        channel.get().setBannerID(updateChannelDTO.getBanner());
+        channel.get().setBannerId(updateChannelDTO.getBannerId());
 
         return Optional.of(channelRepository.save(channel.get()));
 
     }
 
     public Page<ChannelEntity> getChannels(int page, int size, String sortDirection) {
-        Pageable pageable= PageRequest.of(page,size, Sort.Direction.valueOf(sortDirection));
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.valueOf(sortDirection));
         return channelRepository.findAll(pageable);
     }
 
-    public Optional<ChannelEntity> getById(String id){
-        return channelRepository.findById( id);
+    public Optional<ChannelEntity> getById(String id) {
+        return channelRepository.findById(id);
     }
 
     public String changeChannelStatus(Long userId, String role, ChangeChannelStatusDTO dto) throws ChangeSetPersister.NotFoundException {
@@ -92,16 +95,16 @@ public class ChannelService {
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         if (role.equals("ADMIN")) {
-            channel.setVisible(dto.getIsActive());
+            channel.setStatus(ChannelStatus.ACTIVE);
             channelRepository.save(channel);
             return "Channel status updated successfully by ADMIN.";
         }
 
         if (role.equals("OWNER")) {
-            if (!channel.getProfile_id().equals(userId)) {
+            if (!channel.getProfileId().equals(userId)) {
                 throw new AppBadRequestException("You are not authorized to update this channel.");
             }
-            channel.setVisible(dto.getIsActive());
+            channel.setStatus(ChannelStatus.ACTIVE);
             channelRepository.save(channel);
             return "Channel status updated successfully by OWNER.";
         }
