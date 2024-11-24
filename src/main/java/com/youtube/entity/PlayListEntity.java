@@ -28,5 +28,11 @@ public class PlayListEntity {
     @Column(name = "order_number")
     private Integer orderNumber;
 
+    @Column(name = "channel_id", nullable = false)
+    private String channelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id",insertable = false,updatable = false)
+    private ChannelEntity channel;
+
 
 }

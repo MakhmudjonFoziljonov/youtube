@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class ChannelPhotoDTO {
     private String photo;
-    private String banner;
+    private Integer bannerId;
 }
