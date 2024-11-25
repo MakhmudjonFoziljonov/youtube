@@ -50,7 +50,7 @@ public class VideoEntity {
     private Long dislikeCount = 0L;
 
     @Column(name = "category_id", nullable = false)
-    private Integer categoryId;
+    private String categoryId;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",insertable = false, updatable = false)
     private CategoryEntity category;
