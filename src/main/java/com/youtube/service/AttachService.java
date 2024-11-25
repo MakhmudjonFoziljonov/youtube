@@ -173,7 +173,7 @@ public class AttachService {
         attachDTO.setOriginName(entity.getOriginName());
         attachDTO.setSize(entity.getSize());
         attachDTO.setType(entity.getType());
-        attachDTO.setCreatedData(entity.getCreatedDate());
+        attachDTO.setCreatedDate(entity.getCreatedDate());
         attachDTO.setPath(openURL(entity.getId()));
         return attachDTO;
     }

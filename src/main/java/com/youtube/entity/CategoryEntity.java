@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
     @Column(unique = true)
     private String name;

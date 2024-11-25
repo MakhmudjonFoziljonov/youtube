@@ -41,19 +41,21 @@ public class VideoService {
 
 
         VideoEntity videoEntity = new VideoEntity();
+        videoEntity.setId(UUID.randomUUID().toString());
         videoEntity.setTitle(videoDTO.getTitle());
         videoEntity.setDescription(videoDTO.getDescription());
-        videoEntity.setAttachId(savedAttach.getId());
-        videoEntity.setChannelId(videoDTO.getChannelId()); // Kanal ID.
+//        videoEntity.setAttachId(savedAttach.getId());
+//        videoEntity.setChannelId(videoDTO.getChannelId()); // Kanal ID.
         videoEntity.setCategoryId(videoEntity.getCategoryId()); // Kategoriya ID.
         videoEntity.setCreatedDate(LocalDateTime.now());
         videoEntity.setViewCount(0L);
         videoEntity.setLikeCount(0L);
         videoEntity.setDislikeCount(0L);
         VideoEntity savedVideo = videoRepository.save(videoEntity);
-      return convertToDTO(savedVideo,savedAttach);
+        return convertToDTO(savedVideo, savedAttach);
 
     }
+
     private VideoDTO convertToDTO(VideoEntity video, AttachEntity attach) {
         VideoDTO dto = new VideoDTO();
 
@@ -63,7 +65,7 @@ public class VideoService {
         dto.setCreatedDate(video.getCreatedDate());
 
         dto.setAttachId(attach.getPath());
-        dto.setChannelId(video.getChannelId());
+//        dto.setChannelId(video.getChannelId());
         dto.setCategoryId(video.getCategoryId());
 
         dto.setViewCount(video.getViewCount());

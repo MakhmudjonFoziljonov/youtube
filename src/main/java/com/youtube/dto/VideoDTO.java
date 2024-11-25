@@ -14,7 +14,7 @@ public class VideoDTO {
     private LocalDateTime createdDate;
     private String attachId; // Fayl ID (URL yoki path)
     private String channelId;
-    private String CategoryId;
+    private Integer CategoryId;
     private Long viewCount;
     private Long likeCount;
     private Long dislikeCount;

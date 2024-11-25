@@ -36,6 +36,6 @@ public class AttachEntity {
 
     @Column(nullable = false)
     private Double duration;
-    @Column(name = "file_data", columnDefinition = "LONGBLOB")
+    @Column(name = "file_data", columnDefinition = "BYTEA")
     private byte[] fileData;
 }

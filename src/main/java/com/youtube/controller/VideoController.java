@@ -16,13 +16,17 @@ public class VideoController {
     public VideoController(VideoService videoService) {
         this.videoService = videoService;
     }
+
     @PostMapping("/upload")
-     public ResponseEntity<VideoDTO> uploadVideo(  @RequestParam("file") MultipartFile file, VideoDTO videoDTO) {
+    public ResponseEntity<VideoDTO> uploadVideo(@RequestBody MultipartFile file, VideoDTO videoDTO) {
         try {
-            return ResponseEntity.ok(videoService.createVideo(file,videoDTO));
+            return ResponseEntity.ok(videoService.createVideo(file, videoDTO));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+
     }
+
+
 }
