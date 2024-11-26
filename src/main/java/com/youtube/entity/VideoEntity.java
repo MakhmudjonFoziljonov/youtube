@@ -4,11 +4,9 @@ import com.youtube.enums.PlayListStatus;
 import com.youtube.enums.VideoType;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -25,7 +23,7 @@ public class VideoEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "created_date" )
+    @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now(); // Default to now
 
     @Column(name = "published_date")
@@ -54,30 +52,29 @@ public class VideoEntity {
     @Column(name = "category_id")
     private Integer categoryId;
 
-    // Uncomment and fix relationships if required
-    // @OneToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "category_id", insertable = false, updatable = false)
-    // private CategoryEntity category;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private CategoryEntity category;
 
-     @Column(name = "channel_id", nullable = false)
-     private String channelId;
+    @Column(name = "channel_id", nullable = false)
+    private String channelId;
 
-     @ManyToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "channel_id", insertable = false, updatable = false)
-     private ChannelEntity channel;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id", insertable = false, updatable = false)
+    private ChannelEntity channel;
 
-    // @Column(name = "attach_id")
-    // private String attachId;
+    @Column(name = "attach_id")
+    private String attachId;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "attach_id", insertable = false, updatable = false)
-    // private AttachEntity attach;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attach_id", insertable = false, updatable = false)
+    private AttachEntity attach;
 
-    // @Column(name = "preview_attach_id", nullable = false)
-    // private String previewAttachId;
+    @Column(name = "preview_attach_id", insertable = false, updatable = false)
+    private String previewAttachId;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "preview_attach_id")
-    // private AttachEntity previewAttach;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "preview_attach_id")
+    private AttachEntity previewAttach;
 
 }

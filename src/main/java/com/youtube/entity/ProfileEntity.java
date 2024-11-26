@@ -5,6 +5,7 @@ import com.youtube.enums.ProfileStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 @Getter
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "profile_entity")
 public class ProfileEntity {
     @Id
-    @GeneratedValue
+    @UuidGenerator
     private String id;
 
     @Column(name = "name")

@@ -1,8 +1,12 @@
 package com.youtube.controller;
 
 import com.youtube.dto.VideoDTO;
+import com.youtube.dto.VideoShortInfo;
 import com.youtube.enums.PlayListStatus;
 import com.youtube.service.VideoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +38,7 @@ public class VideoController {
     @PutMapping("/{videoId}/details")
     public ResponseEntity<String> updateVideoDetails(
             @PathVariable String videoId,
-            @RequestBody VideoDTO videoDTO, // Yangilash uchun request
+            @RequestBody VideoDTO videoDTO,
             @RequestParam String userId){
         try {
             videoService.updateVideoDetails(videoId, videoDTO, userId);
@@ -70,7 +74,13 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Video not found with ID: " + videoId);
         }
-
-
+    }
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<Page<VideoShortInfo>> getVideos(@PathVariable("categoryId") String categoryId,
+                                                          @RequestParam("page") int page,
+                                                          @RequestParam("size") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VideoShortInfo> videoShortInfos = videoService.getVideosByCategoryId(categoryId, pageable);
+        return ResponseEntity.ok(videoShortInfos);
     }
 }

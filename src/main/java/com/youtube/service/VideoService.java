@@ -1,11 +1,14 @@
 package com.youtube.service;
 
 import com.youtube.dto.VideoDTO;
+import com.youtube.dto.VideoShortInfo;
 import com.youtube.entity.AttachEntity;
 import com.youtube.entity.VideoEntity;
 import com.youtube.enums.PlayListStatus;
 import com.youtube.repository.AttachRepository;
 import com.youtube.repository.VideoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -104,6 +108,25 @@ public class VideoService {
 
         return true;
     }
+
+    public Page<VideoShortInfo> getVideosByCategoryId(String categoryId, Pageable pageable) {
+        Page<VideoEntity> videoPage = videoRepository.findVideosByCategoryId(categoryId, pageable);
+
+        Page<VideoShortInfo> videoShortInfoPage = videoPage.map(video -> {
+            VideoShortInfo videoShortInfo = new VideoShortInfo();
+            videoShortInfo.setId(video.getId());
+            videoShortInfo.setTitle(video.getTitle());
+
+            if (video.getPreviewAttach() != null) {
+                videoShortInfo.setAttach(video.getPreviewAttach());
+            }
+
+            return videoShortInfo;
+        });
+
+        return videoShortInfoPage;
+    }
+
 
 
 
