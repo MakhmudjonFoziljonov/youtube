@@ -59,12 +59,12 @@ public class VideoEntity {
     // @JoinColumn(name = "category_id", insertable = false, updatable = false)
     // private CategoryEntity category;
 
-    // @Column(name = "channel_id", nullable = false)
-    // private String channelId;
+     @Column(name = "channel_id", nullable = false)
+     private String channelId;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "channel_id", insertable = false, updatable = false)
-    // private ChannelEntity channel;
+     @ManyToOne(fetch = FetchType.LAZY)
+     @JoinColumn(name = "channel_id", insertable = false, updatable = false)
+     private ChannelEntity channel;
 
     // @Column(name = "attach_id")
     // private String attachId;
