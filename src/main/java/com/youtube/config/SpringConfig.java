@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,16 +27,15 @@ public class SpringConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Autowired
     private JwtAuthenticationFilter jwtTokenFilter;
 
     public static final String[] AUTH_WHITELIST = {
             "/profile/registration",
             "/profile/authorization",
-<<<<<<< HEAD
             "/swagger-ui/**",
-            "/v3/api-docs/**"
-=======
+            "/v3/api-docs/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -51,7 +49,6 @@ public class SpringConfig {
             "/attach/**",
             "/auth/**",
             "/api/v1/sms/**"
->>>>>>> 9053c9c5471574bc8726b4ad81f8f080afd0b68e
     };
 
     @Bean
