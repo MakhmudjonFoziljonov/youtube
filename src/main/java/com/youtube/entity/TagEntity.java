@@ -3,6 +3,7 @@ package com.youtube.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 @Getter
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 public class TagEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @UuidGenerator
+    private String id;
     @Column(name = "name")
     private String name;
     @Column(name = "created")
