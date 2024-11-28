@@ -38,7 +38,7 @@ public class TagController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
 
-    public void updateTag(@PathVariable Integer id, @RequestBody TagDTO tagDTO) {
+    public void updateTag(@PathVariable String id, @RequestBody TagDTO tagDTO) {
           tagService.update(id, tagDTO);
     }
     @DeleteMapping("{id}")
@@ -48,7 +48,7 @@ public class TagController {
             description = "Allows an admin to delete a tag by its ID.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public void deleteTag(@PathVariable Integer id) {
+    public void deleteTag(@PathVariable String id) {
        tagService.delete(id);
     }
 

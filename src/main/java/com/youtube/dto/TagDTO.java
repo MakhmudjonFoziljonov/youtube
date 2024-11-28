@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class TagDTO {
 
-    private int id;
+    private String id;
     private String name;
     private LocalDateTime createdate;
 }

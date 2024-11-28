@@ -28,7 +28,7 @@ public class TagService {
         tagRepository.save(tagEntity);
     }
 
-    public TagEntity update(Integer id, TagDTO tagDTO) {
+    public TagEntity update(String id, TagDTO tagDTO) {
         TagEntity entity = tagRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tag with ID " + id + " not found"));
 
@@ -37,7 +37,7 @@ public class TagService {
         return tagRepository.save(entity);
     }
 
-    public void delete(Integer id) {
+    public void delete(String id) {
         Optional<TagEntity> entity=tagRepository.findById(id);
         if(entity.isPresent()) {
             tagRepository.delete(entity.get());
