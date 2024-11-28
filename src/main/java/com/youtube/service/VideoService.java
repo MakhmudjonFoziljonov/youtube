@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,14 +32,14 @@ public class VideoService {
         this.attachRepository = attachRepository;
     }
 
-    public VideoDTO createVideo(MultipartFile file, VideoDTO videoDTO) throws IOException {
+    public VideoDTO createVideo( VideoDTO videoDTO) throws IOException {
 
         AttachEntity attach = new AttachEntity();
         attach.setId(UUID.randomUUID().toString());
-        attach.setOriginName(file.getOriginalFilename());
-        attach.setSize(file.getSize());
-        attach.setType(file.getContentType());
-        attach.setPath(saveFileToSystem(file));
+//        attach.setOriginName(file.getOriginalFilename());
+//        attach.setSize(file.getSize());
+//        attach.setType(file.getContentType());
+//        attach.setPath(saveFileToSystem(file));
         attach.setDuration(0.0);
         attach.setCreatedDate(LocalDateTime.now());
 
@@ -50,7 +49,7 @@ public class VideoService {
         videoEntity.setId(UUID.randomUUID().toString());
         videoEntity.setTitle(videoDTO.getTitle());
         videoEntity.setDescription(videoDTO.getDescription());
-        // videoEntity.setAttachId(savedAttach.getId());
+         videoEntity.setAttachId(savedAttach.getId());
         // videoEntity.setChannelId(videoDTO.getChannelId()); // Kanal ID.
         videoEntity.setCategoryId(videoDTO.getCategoryId()); // Kategoriya ID.
         videoEntity.setCreatedDate(LocalDateTime.now());

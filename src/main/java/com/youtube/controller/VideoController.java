@@ -4,6 +4,7 @@ import com.youtube.dto.VideoDTO;
 import com.youtube.dto.VideoShortInfo;
 import com.youtube.enums.PlayListStatus;
 import com.youtube.service.VideoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +26,13 @@ public class VideoController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<VideoDTO> uploadVideo(@RequestBody MultipartFile file, VideoDTO videoDTO) {
+    @Operation(
+            summary = "Upload a new video",
+            description = "This endpoint allows users to upload a new video. The video details (e.g., title, description, etc.) should be provided in the request body."
+    )
+    public ResponseEntity<VideoDTO> uploadVideo(@RequestBody  VideoDTO videoDTO) {
         try {
-            return ResponseEntity.ok(videoService.createVideo(file, videoDTO));
+            return ResponseEntity.ok(videoService.createVideo( videoDTO));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -36,6 +41,10 @@ public class VideoController {
     }
 
     @PutMapping("/{videoId}/details")
+    @Operation(
+            summary = "Update video details",
+            description = "Allows updating the details (e.g., title, description) of an existing video. Requires the video ID, new details, and user ID."
+    )
     public ResponseEntity<String> updateVideoDetails(
             @PathVariable String videoId,
             @RequestBody VideoDTO videoDTO,
@@ -53,6 +62,10 @@ public class VideoController {
 
 
     @PutMapping("/{videoId}/status")
+    @Operation(
+            summary = "Change video status",
+            description = "Allows changing the status of a video (e.g., PUBLIC or PRIVATE). Requires the video ID, new status, and user ID."
+    )
     public ResponseEntity<String> changeVideoStatus(
             @PathVariable String videoId,
             @RequestParam PlayListStatus newStatus,
@@ -66,6 +79,10 @@ public class VideoController {
     }
 
     @PutMapping("/{id}/incrementView")
+    @Operation(
+            summary = "Increment video view count",
+            description = "This endpoint increments the view count of a video by its ID. Returns an error if the video is not found."
+    )
     public ResponseEntity<String> incrementViewCount(@PathVariable("id") String videoId) {
         boolean isUpdated = videoService.incrementViewCount(videoId);
         if (isUpdated) {
@@ -76,6 +93,10 @@ public class VideoController {
         }
     }
     @GetMapping("/category/{categoryId}")
+    @Operation(
+            summary = "Get videos by category",
+            description = "Retrieve a paginated list of videos that belong to a specific category. The category ID, page number, and page size must be provided."
+    )
     public ResponseEntity<Page<VideoShortInfo>> getVideos(@PathVariable("categoryId") String categoryId,
                                                           @RequestParam("page") int page,
                                                           @RequestParam("size") int size) {
