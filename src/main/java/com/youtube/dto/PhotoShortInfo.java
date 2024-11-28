@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChannelPhotoDTO {
-    private String photo;
-    private Integer bannerId;
+public class PhotoShortInfo {
+    private String id;
+    private String url;
 }

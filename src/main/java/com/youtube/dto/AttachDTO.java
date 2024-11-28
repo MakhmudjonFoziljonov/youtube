@@ -15,5 +15,7 @@ public class AttachDTO {
     private Long size;
     private String type;
     private String path;
-    private LocalDateTime createdData;
+    private LocalDateTime createdDate;
+    private Boolean visible;
+    private Double duration;
 }

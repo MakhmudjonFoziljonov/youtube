@@ -1,17 +1,14 @@
 package com.youtube.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.Stack;
 
 @Entity
-@Getter
-@Setter
-@Table(name = "video_watches")
+@Data
+@Table(name = "videos_watched")
 public class VideoWatchedEntity {
     @Id
     @UuidGenerator
@@ -20,15 +17,18 @@ public class VideoWatchedEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
+
     @Column(name = "profile_id")
-    private String profileId;
+    private String profile_id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profile;
-/*
+
     @Column(name = "video_id")
     private String videoId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "video_id", insertable = false,updatable = false)
-    private VideoEntity video;*/
+    @JoinColumn(name = "video_id", insertable = false, updatable = false)
+    private VideoEntity video;
+
+
 }
