@@ -34,3 +34,6 @@ build/
 attaches
 
 talablar.txt
+
+*.png
+*.jpg

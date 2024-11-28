@@ -34,8 +34,24 @@ public class SpringConfig {
     public static final String[] AUTH_WHITELIST = {
             "/profile/registration",
             "/profile/authorization",
+<<<<<<< HEAD
             "/swagger-ui/**",
             "/v3/api-docs/**"
+=======
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html",
+            "/attach/**",
+            "/auth/**",
+            "/api/v1/sms/**"
+>>>>>>> 9053c9c5471574bc8726b4ad81f8f080afd0b68e
     };
 
     @Bean
@@ -55,6 +71,7 @@ public class SpringConfig {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers(AUTH_WHITELIST).permitAll()
                     .requestMatchers(HttpMethod.GET, "/task", "/task/*").permitAll()
+                    .requestMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest()
                     .authenticated();
         }).addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
