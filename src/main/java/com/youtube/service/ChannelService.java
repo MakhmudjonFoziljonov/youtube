@@ -111,4 +111,5 @@ public class ChannelService {
 
         throw new AppBadRequestException("Users are not allowed to update channel status.");
     }
+
 }
