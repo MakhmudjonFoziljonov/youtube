@@ -1,0 +1,19 @@
+### 1. Create a Report (POST /reports)
+POST http://localhost:8080/reports
+Content-Type: application/json
+
+{
+  "profileId": 100,
+  "content": "This is a sample report content",
+  "entityId": 200,
+  "type": "VIDEO"
+}
+
+### 2. Get All Reports (GET /reports)
+GET http://localhost:8080/reports
+
+### 3. Get a Specific Report by ID (GET /reports/{id})
+GET http://localhost:8080/reports/1
+
+### 4. Delete a Report (DELETE /reports/{id})
+DELETE http://localhost:8080/reports/1
